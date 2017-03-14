@@ -1,5 +1,6 @@
-import DataAccess = require('../../../common/dataAccess/DataAccess');
-import IHeroModel = require("../interfaces/UserModelInterface");
+import DataAccess = require('../../../common/services/DataAccess');
+import IHeroModel = require('../interfaces/UserModelInterface');
+import Hash       = require('../../../common/services/Hash');
 
 const mongoose           = DataAccess.mongooseInstance;
 const mongooseConnection = DataAccess.mongooseConnection;
@@ -38,8 +39,21 @@ class UserSchema {
             });
         }, 'Email already exists');
 
+        schema.pre('save', function(next) {
+            let user = this;
+
+            // only hash the password if it has been modified (or is new)
+            if (!user.isModified('password')) {
+                return next();
+            }
+
+            user.password = Hash.hashPassword(user.password);
+
+            next();
+        });
+
         return schema;
     }
 }
-var schema = mongooseConnection.model<IHeroModel>("Users", UserSchema.schema);
-export = schema;
+const schema = mongooseConnection.model<IHeroModel>("Users", UserSchema.schema);
+export  = schema;

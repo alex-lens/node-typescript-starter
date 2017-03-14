@@ -19,7 +19,8 @@ app.use(express.static(path.resolve(__dirname, '../../node_modules')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.post('/login', Auth.loginHandler);
+app.post('/signIn', Auth.signInHandler);
+app.post('/signUp', Auth.signUp);
 app.use('/api', Auth.isAuthenticated, new BaseRoutes().routes);
 
 const renderIndex = (req: express.Request, res: express.Response) => {
