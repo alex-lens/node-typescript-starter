@@ -19,3 +19,4 @@ test
 tmp
 gulpfile.js
 gulpfile.js.map
+client/app/config/env.json

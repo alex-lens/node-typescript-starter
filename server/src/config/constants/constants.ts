@@ -8,5 +8,4 @@ class Constants {
     static ENV: string                  = process.env.NODE_ENV;
 }
 
-Object.seal(Constants);
-export = Constants;
+export = Object.freeze(Constants);

@@ -10,7 +10,12 @@ const gulp        = require("gulp"),
       concat      = require('gulp-concat'),
       runSequence = require('run-sequence'),
       nodemon     = require('gulp-nodemon'),
-      gulpTypings = require("gulp-typings");
+      gulpTypings = require("gulp-typings"),
+      fs          = require("fs");
+
+const configDefaultPath = __dirname + "/client/app/config/env.json.default";
+const configPath        = __dirname + "/client/app/config/env.json";
+const constantFilePath  = __dirname + "/dist/client/app/services/constant.service.js";
 
 /**
  * Remove build directory.
@@ -107,6 +112,24 @@ gulp.task("css", () => {
 });
 
 
+gulp.task("clientCopyEnvFile", () => {
+    if (!fs.existsSync(configPath)) {
+        let data = fs.readFileSync(configDefaultPath);
+        fs.writeFileSync(configPath, data);
+    }
+});
+
+/**
+ * Copy all required libraries into build directory.
+ */
+gulp.task("clientAddEnvConstants", () => {
+    let envConstant     = JSON.parse(fs.readFileSync(configPath));
+    let constantService = fs.readFileSync(constantFilePath);
+    var result = constantService.toString().replace(/%%API_URL%%/g, envConstant.API_URL);
+    fs.writeFileSync(constantFilePath, result );
+
+});
+
 /**
  * Install typings for server and client.
  */
@@ -171,7 +194,8 @@ gulp.task('watch', function () {
  */
 
 gulp.task("build", function (callback) {
-    runSequence('clean', 'build:server', 'build:client', 'clientResources', 'serverResources', 'libs', 'css', callback);
+    runSequence('clean', 'build:server', 'build:client', 'clientResources', 'serverResources',
+        'clientCopyEnvFile', 'clientAddEnvConstants', 'libs', 'css', callback);
 });
 
 gulp.task('default', function () {
