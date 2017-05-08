@@ -17,6 +17,9 @@ const configDefaultPath = __dirname + "/client/app/config/env.json.default";
 const configPath        = __dirname + "/client/app/config/env.json";
 const constantFilePath  = __dirname + "/dist/client/app/services/constant.service.js";
 
+const envDefaultFilePath  = __dirname + "/.env_default";
+const envFilePath         = __dirname + "/.env";
+
 /**
  * Remove build directory.
  */
@@ -119,6 +122,13 @@ gulp.task("clientCopyEnvFile", () => {
     }
 });
 
+gulp.task("serverCopyEnvFile", () => {
+    if (!fs.existsSync(envFilePath)) {
+        let data = fs.readFileSync(envDefaultFilePath);
+        fs.writeFileSync(envFilePath, data);
+    }
+});
+
 /**
  * Copy all required libraries into build directory.
  */
@@ -195,7 +205,7 @@ gulp.task('watch', function () {
 
 gulp.task("build", function (callback) {
     runSequence('clean', 'build:server', 'build:client', 'clientResources', 'serverResources',
-        'clientCopyEnvFile', 'clientAddEnvConstants', 'libs', 'css', callback);
+        'serverCopyEnvFile', 'clientCopyEnvFile', 'clientAddEnvConstants', 'libs', 'css', callback);
 });
 
 gulp.task('default', function () {
