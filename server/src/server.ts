@@ -3,6 +3,7 @@ import path         = require('path');
 import express      = require('express');
 import BaseRoutes   = require("./config/routes/Routes");
 import bodyParser   = require("body-parser");
+import cors         = require('express-cors');
 import Constants    = require("./config/constants/constants");
 
 const Auth          = require('./common/services/Auth');
@@ -18,6 +19,7 @@ app.use(express.static(path.resolve(__dirname, '../../node_modules')));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(cors(Constants.CORS_OPTIONS));
 
 app.post('/signIn', Auth.signInHandler);
 app.post('/signUp', Auth.signUp);
