@@ -20,6 +20,13 @@ class RepositoryBase<T extends mongoose.Document> implements IRead<T>, IWrite<T>
         this._model.find({}, callback);
     }
 
+    retrieveWhere (conditions: object = {}, callback: (error: any, result: any) => void) {
+        this._model.find(conditions, callback);
+    }
+    retrieveWhereOnly (conditions: object = {}, fields: string, callback: (error: any, result: any) => void) {
+        this._model.find(conditions, fields, callback);
+    }
+
     update (_id: mongoose.Types.ObjectId, item: T, callback: (error: any, result: any) => void) {
         this._model.update({_id: _id}, item, callback);
 
@@ -38,6 +45,9 @@ class RepositoryBase<T extends mongoose.Document> implements IRead<T>, IWrite<T>
         this._model.findOne( object, callback);
     }
 
+    findOneOnly (conditions: object, fields: string, callback: (error: any, result: T) => void) {
+        this._model.findOne( conditions, fields, callback);
+    }
 
     private toObjectId (_id: string) : mongoose.Types.ObjectId {
         return mongoose.Types.ObjectId.createFromHexString(_id)

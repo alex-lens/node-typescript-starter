@@ -6,6 +6,7 @@ class Constants {
     static MD5_SALT: string             = process.env.MD5_SALT;
     static PORT: number                 = process.env.PORT;
     static ENV: string                  = process.env.NODE_ENV;
+    static FCM_SERVER_KEY: string       = process.env.FCM_SERVER_KEY;
     static CORS_OPTIONS: object         = {
         allowedOrigins: [
             'localhost:*'

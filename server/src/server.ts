@@ -6,8 +6,9 @@ import bodyParser   = require("body-parser");
 import cors         = require('express-cors');
 import Constants    = require("./config/constants/constants");
 
-const Auth          = require('./common/services/Auth');
-const app           = express();
+const Auth             = require('./common/services/Auth');
+const PushNotification = require('./common/services/PushNotification');
+const app              = express();
 
 app.set('port', Constants.PORT);
 app.use('/app', express.static(path.resolve(__dirname, '../client/app')));
